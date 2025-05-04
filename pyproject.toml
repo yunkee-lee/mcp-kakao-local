@@ -1,0 +1,18 @@
+[project]
+name = "mcp-kakao-local"
+version = "0.1.0"
+description = "MCP for Kakao Local"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "httpx[http2]>=0.28.1",
+    "mcp[cli]>=1.7.1",
+    "python-dotenv>=1.1.0",
+]
+
+[project.scripts]
+mcp_kakao_local = "mcp_kakao_local:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
