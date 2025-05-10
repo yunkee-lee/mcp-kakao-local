@@ -10,6 +10,7 @@ kakao_local_client = KakaoLocalClient()
 
 INSTRUCTIONS = """
 Kakao Local MCP provides tools for retrieving location information within South Korea.
+Availalble tools are listed in <tools> and recsources are listed in <resources>. You must follow all <rules>.
 
 <tools>
 - find_coordinates: Finds the coordinates of a given [address]. The response contains a list of [document],
@@ -31,6 +32,7 @@ Kakao Local MCP provides tools for retrieving location information within South 
   you can call the same tool with an increased [page], if supported, unless the last result is the last page.
 - When making consecutive calls to the same MCP tool, wait for a random duration selected between 0 ms and 50ms and
   use exponential backoff between calls.
+- [category_group_code] must be one of [CategoryGroupCode] names (available in <resources>). Values of [CategoryGroupCode] are descriptions, which cannot be used in <tools>.
 </rules>
 """.strip()
 
