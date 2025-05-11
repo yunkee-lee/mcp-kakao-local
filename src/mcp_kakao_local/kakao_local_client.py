@@ -1,18 +1,25 @@
 import httpx
 import os
 
-from mcp_kakao_local.models import AddressResponse, CategoryGroupCode, Coordinate, LocationSortOption, LocationSearchResponse, PlaceDetailResponse
+from mcp_kakao_local.models import (
+  AddressResponse,
+  CategoryGroupCode,
+  Coordinate,
+  LocationSortOption,
+  LocationSearchResponse,
+  PlaceDetailResponse,
+)
 from typing import Any
 
-class KakaoLocalClient:
 
+class KakaoLocalClient:
   BASE_URL = "https://dapi.kakao.com/v2/local"
 
   def __init__(self):
     rest_api_key = os.getenv("REST_API_KEY")
     if not rest_api_key:
       raise AuthError("missing REST API key")
-    
+
     self.headers = {
       "Authorization": f"KakaoAK {rest_api_key}",
       "accept": "application/json",
@@ -20,8 +27,7 @@ class KakaoLocalClient:
     }
 
   async def find_coordinates(self, address: str, page: int = 1, size: int = 10) -> AddressResponse:
-    """https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord
-    """
+    """https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord"""
     path = f"{self.BASE_URL}/search/address"
     params = {
       "query": address,
@@ -41,8 +47,7 @@ class KakaoLocalClient:
     size: int = 10,
     sort_option: LocationSortOption = LocationSortOption.ACCURACY,
   ) -> LocationSearchResponse:
-    """https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
-    """
+    """https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword"""
     path = f"{self.BASE_URL}/search/keyword"
     params = {
       "query": keyword,
@@ -56,7 +61,7 @@ class KakaoLocalClient:
     }
     response_json = await self._get(path, {k: v for k, v in params.items() if v is not None})
     return LocationSearchResponse(**response_json)
-  
+
   async def search_by_category(
     self,
     category_group_code: CategoryGroupCode,
@@ -66,8 +71,7 @@ class KakaoLocalClient:
     size: int = 10,
     sort_option: LocationSortOption = LocationSortOption.ACCURACY,
   ) -> LocationSearchResponse:
-    """https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-category
-    """
+    """https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-category"""
     path = f"{self.BASE_URL}/search/category"
     params = {
       "category_group_code": category_group_code.name,
@@ -80,7 +84,7 @@ class KakaoLocalClient:
     }
     response_json = await self._get(path, params)
     return LocationSearchResponse(**response_json)
-  
+
   async def get_place_details(self, place_id: int) -> PlaceDetailResponse:
     headers = {
       "Accept": "application/json, text/plain, */*",
@@ -109,7 +113,7 @@ class KakaoLocalClient:
         return response.raise_for_status().json()
       except httpx.HTTPError as exc:
         self._handle_response_status(response.status_code, exc)
-  
+
   def _handle_response_status(self, http_status_code: int, http_error: httpx.HTTPError):
     error_str = str(http_error)
     if http_status_code == 400:
@@ -119,21 +123,26 @@ class KakaoLocalClient:
     if http_status_code == 420:
       raise RateLimitError(error_str)
     if http_status_code != 200:
-      raise KakaoClientError(f"Unexpected error [status_code={http_status_code}, error={error_str}]")
+      raise KakaoClientError(
+        f"Unexpected error [status_code={http_status_code}, error={error_str}]"
+      )
+
 
 class KakaoClientError(Exception):
-
   def __init__(self, message: str):
     self.message = message
     super().__init__(self.message)
+
 
 class BadRequestError(KakaoClientError):
   def __init__(self, message):
     super().__init__(f"Bad request: {message}")
 
+
 class AuthError(KakaoClientError):
   def __init__(self, message):
     super().__init__(f"Auth error: {message}")
+
 
 class RateLimitError(KakaoClientError):
   def __init__(self, message):

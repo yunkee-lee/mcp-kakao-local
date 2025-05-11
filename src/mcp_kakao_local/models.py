@@ -2,13 +2,16 @@ from enum import Enum
 from pydantic import BaseModel, Field
 from typing import Literal
 
+
 class Coordinate(BaseModel):
   longitude: str
   latitude: str
 
+
 class LocationSortOption(Enum):
   DISTANCE = "distance"
   ACCURACY = "accuracy"
+
 
 class CategoryGroupCode(Enum):
   MT1 = "대형마트 (Large Mart, Grocery Store)"
@@ -30,16 +33,27 @@ class CategoryGroupCode(Enum):
   HP8 = "병원 (Hospital)"
   PM9 = "약국 (Pharmacy)"
 
+
 class SameName(BaseModel):
-  region: list[str] = Field(description="List of regions searched from the query. Example: the region list corresponding to 'Jungang-ro' in 'Jungang-ro restaurants'")
-  keyword: str = Field(description="Keyword excluding region information from the query. Example: 'restaurants' from 'Jungang-ro restaurants'")
+  region: list[str] = Field(
+    description="List of regions searched from the query. Example: the region list corresponding to 'Jungang-ro' in 'Jungang-ro restaurants'"
+  )
+  keyword: str = Field(
+    description="Keyword excluding region information from the query. Example: 'restaurants' from 'Jungang-ro restaurants'"
+  )
   selected_region: str = Field(description="The region information currently used in the search")
+
 
 class Meta(BaseModel):
   total_count: int = Field(description="Number of documents found for the search results", ge=0)
   pageable_count: int = Field(description="Number of documents allowed in a page", ge=0, le=45)
-  is_end: bool = Field(description="Whether the current page is the last page. If false, increase the page value in the next request to fetch the next page")
-  same_name: SameName | None = Field(None, description="Region and keyword analysis information of the query")
+  is_end: bool = Field(
+    description="Whether the current page is the last page. If false, increase the page value in the next request to fetch the next page"
+  )
+  same_name: SameName | None = Field(
+    None, description="Region and keyword analysis information of the query"
+  )
+
 
 class PlaceDocument(BaseModel):
   id: str = Field(description="Place ID")
@@ -53,23 +67,32 @@ class PlaceDocument(BaseModel):
   x: str = Field(description="longitude")
   y: str = Field(description="latitude")
   place_url: str = Field(description="Place detail page URL")
-  distance: str | None = Field(None, description="Distance from the center coordinate in meters (non-null only when x and y parameters are provided in a request)")
+  distance: str | None = Field(
+    None,
+    description="Distance from the center coordinate in meters (non-null only when x and y parameters are provided in a request)",
+  )
+
 
 class AddressDocument(BaseModel):
   address_name: str = Field(description="street address or land-lot address (지번 주소)")
-  address_type: Literal["REGION", "ROAD", "REGION_ADDR", "ROAD_ADDR"] = Field(description="type of address")
+  address_type: Literal["REGION", "ROAD", "REGION_ADDR", "ROAD_ADDR"] = Field(
+    description="type of address"
+  )
   x: str = Field(description="longitude")
   y: str = Field(description="latitude")
   address: dict = Field(description="details of land-lot address (지번 주소)")
   road_address: dict = Field(description="details of street address")
 
+
 class LocationSearchResponse(BaseModel):
   meta: Meta = Field(description="Response metadata")
   documents: list[PlaceDocument] = Field(description="List of places")
 
+
 class AddressResponse(BaseModel):
   meta: Meta = Field(description="Response metadata")
   documents: list[AddressDocument] = Field(description="List of addresses")
+
 
 class PlaceSummary(BaseModel):
   confirm_id: int = Field(description="ID of the place")
@@ -77,6 +100,7 @@ class PlaceSummary(BaseModel):
   category: dict = Field(description="Category names of the place")
   point: dict = Field(description="Lon (longitude) and lat (latitude) of the place")
   address: dict = Field(description="Contains road (street) address and jibun (land-lot) address")
+
 
 class PlaceDetailResponse(BaseModel):
   menu: dict = Field({}, description="Menus if the place has menus")
