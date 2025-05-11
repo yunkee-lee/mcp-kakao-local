@@ -18,8 +18,7 @@ Availalble tools are listed in <tools> and recsources are listed in <resources>.
 - search_by_keyword: Searches for places related to the keyword. Users can provide [category_group_code],
   [center_coordinate], and [radius_from_center] to narrow down the search results.
 - search_by_category: Searches for places with matching category group code.
-- get_reviews: Fetches reviews for a place. The [place_id] parameter corresponds to a document ID from the location search results.
-  Use [scores.average_score] in the response to determine the place's review score. If [scores] is empty, use [blog_review.review_count].
+- get_place: Fetches details for a place. The [place_id] parameter corresponds to a document ID from the location search results.
 </tools>
 
 <resources>
@@ -100,21 +99,16 @@ async def search_by_category(
   except Exception as ex:
     return { "success": False, "error": str(ex) }
 
-@mcp.tool(description="Fetches reviews of a place")
-async def get_reviews(
+@mcp.tool(description="Fetches details of a place")
+async def get_place(
   place_id: int = Field(description="ID of a place, which is document ID in location search results", ge=1)
 ) -> dict:
   """
   Returns:
-    dict: An object containing reviews of the place
-      - blog_review (dict): Blog reviews of the place.
-      - reviews (list): Reviews of the place, empty if review is not provided.
-      - scores (dict): Contains average review score, empty if review is not provided.
-      - description (list): Summary of reviews, empty if review is not provided.
-      - photos (list): Photos of the place
+    PlaceDetailResponse: An object containing details of the place
   """
   try:
-    return await kakao_local_client.get_place_review(place_id)
+    return await kakao_local_client.get_place_details(place_id)
   except Exception as ex:
     return { "success": False, "error": str(ex) }
 

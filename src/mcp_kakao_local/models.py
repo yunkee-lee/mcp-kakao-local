@@ -70,3 +70,20 @@ class LocationSearchResponse(BaseModel):
 class AddressResponse(BaseModel):
   meta: Meta = Field(description="Response metadata")
   documents: list[AddressDocument] = Field(description="List of addresses")
+
+class PlaceSummary(BaseModel):
+  confirm_id: int = Field(description="ID of the place")
+  name: str = Field(description="Name of the place")
+  category: dict = Field(description="Category names of the place")
+  point: dict = Field(description="Lon (longitude) and lat (latitude) of the place")
+  address: dict = Field(description="Contains road (street) address and jibun (land-lot) address")
+
+class PlaceDetailResponse(BaseModel):
+  menu: dict = Field({}, description="Menus if the place has menus")
+  summary: PlaceSummary = Field(description="Summary of the place")
+  business_hours: dict = Field(description="Details of business hours")
+  photos: dict = Field(description="Contains counts (metadata) and photos of the place")
+  blog_review: dict = Field(description="Review of the place in blogs")
+  kakaomap_review: dict = Field(description="Review of the place on Kakap Map (optional)")
+  find_way: dict = Field(description="Transit information nearby the place")
+  place_add_info: dict = Field(description="Additional information of the place")

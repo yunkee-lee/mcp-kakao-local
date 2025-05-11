@@ -1,7 +1,7 @@
 import httpx
 import os
 
-from mcp_kakao_local.models import AddressResponse, CategoryGroupCode, Coordinate, LocationSortOption, LocationSearchResponse
+from mcp_kakao_local.models import AddressResponse, CategoryGroupCode, Coordinate, LocationSortOption, LocationSearchResponse, PlaceDetailResponse
 from typing import Any
 
 class KakaoLocalClient:
@@ -81,7 +81,7 @@ class KakaoLocalClient:
     response_json = await self._get(path, params)
     return LocationSearchResponse(**response_json)
   
-  async def get_place_review(self, place_id: int) -> dict:
+  async def get_place_details(self, place_id: int) -> PlaceDetailResponse:
     headers = {
       "Accept": "application/json, text/plain, */*",
       "Accept-Encoding": "gzip, deflate, br",
@@ -97,14 +97,7 @@ class KakaoLocalClient:
       response = await client.get(f"https://place-api.map.kakao.com/places/panel3/{place_id}")
       try:
         response_json = response.raise_for_status().json()
-        kakaomap_review = response_json.get("kakaomap_review", {})
-        return {
-          "blog_review": response_json.get("blog_review", {}),
-          "reviews": kakaomap_review.get("reviews", []),
-          "scores": kakaomap_review.get("score_set", {}),
-          "description": kakaomap_review.get("strength_description", []),
-          "photos": response_json.get("photos", [])
-        }
+        return PlaceDetailResponse(**response_json)
       except httpx.HTTPError as exc:
         self._handle_response_status(response.status_code, exc)
 
