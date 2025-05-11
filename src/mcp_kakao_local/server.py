@@ -23,7 +23,7 @@ Availalble tools are listed in <tools> and recsources are listed in <resources>.
 - search_by_keyword: Searches for places related to the keyword. Users can provide [category_group_code],
   [center_coordinate], and [radius_from_center] to narrow down the search results.
 - search_by_category: Searches for places with matching category group code.
-- get_place: Fetches details for a place. The [place_id] parameter corresponds to a document ID from the location search results.
+- get_place: Fetches details for a place such as name, address, reviews, photos and etc. The [place_id] parameter corresponds to a document ID from the location search results.
 </tools>
 
 <resources>
@@ -121,7 +121,7 @@ async def search_by_category(
     return {"success": False, "error": str(ex)}
 
 
-@mcp.tool(description="Fetches details of a place")
+@mcp.tool(description="Fetches details for a place such as name, address, reviews, photos and etc")
 async def get_place(
   place_id: int = Field(
     description="ID of a place, which is document ID in location search results", ge=1
