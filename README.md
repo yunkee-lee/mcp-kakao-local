@@ -1,7 +1,10 @@
 # MCP Kakao Local
 
-The MCP connects to the [Kakao Local API](https://developers.kakao.com/docs/latest/ko/local/common) and Kakao Map.
-카카오 로컬 API 및 카카오맵에 연결하는 MCP 서버.
+The MCP connects to the [Kakao Local API](https://developers.kakao.com/docs/latest/ko/local/common) and Kakao Map. 카카오 로컬 API 및 카카오맵에 연결하는 MCP 서버.
+
+<a href="https://glama.ai/mcp/servers/@yunkee-lee/mcp-kakao-local">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@yunkee-lee/mcp-kakao-local/badge" alt="Kakao Local MCP server" />
+</a>
 
 ## Prerequisites
 
