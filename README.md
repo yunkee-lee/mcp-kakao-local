@@ -1,5 +1,7 @@
 # MCP Kakao Local
 
+[![smithery badge](https://smithery.ai/badge/@yunkee-lee/mcp-kakao-local)](https://smithery.ai/server/@yunkee-lee/mcp-kakao-local)
+
 The MCP connects to the [Kakao Local API](https://developers.kakao.com/docs/latest/ko/local/common) and Kakao Map.
 카카오 로컬 API 및 카카오맵에 연결하는 MCP 서버.
 
@@ -38,3 +40,11 @@ Before you begin, ensure you have the following installed:
     source .venv/bin/activate
     mcp dev src/mcp_kakao_local/server.py
     ```
+
+### Installing via Smithery
+
+To install Kakao Local API Connector for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@yunkee-lee/mcp-kakao-local):
+
+```bash
+npx -y @smithery/cli install @yunkee-lee/mcp-kakao-local --client claude
+```
